@@ -26,7 +26,7 @@ class UsersController:
         if current_user.business:
             user_response.business_name = current_user.business.name
         
-        return UserResponse.model_validate(current_user)
+        return user_response
 
     @staticmethod
     async def get_users(

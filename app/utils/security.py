@@ -2,6 +2,8 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
+import secrets
+import string
 from app.config.settings import settings
 from app.schemas.auth.auth_schema import TokenPayload
 from app.models.users.user_model import UserRole
@@ -22,6 +24,40 @@ def get_password_hash(password: str) -> str:
     Genera un hash de una contraseña.
     """
     return pwd_context.hash(password)
+
+
+def generate_random_password(length: int = 12) -> str:
+    """
+    Genera una contraseña aleatoria segura.
+
+    Args:
+        length: Longitud de la contraseña (por defecto 12)
+
+    Returns:
+        Contraseña generada aleatoriamente con mayúsculas, minúsculas, números y símbolos
+    """
+    # Definir los caracteres a usar
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    symbols = "!@#$%&*"
+
+    # Asegurar que la contraseña tenga al menos un carácter de cada tipo
+    password = [
+        secrets.choice(lowercase),
+        secrets.choice(uppercase),
+        secrets.choice(digits),
+        secrets.choice(symbols),
+    ]
+
+    # Rellenar el resto de la contraseña con caracteres aleatorios
+    all_characters = lowercase + uppercase + digits + symbols
+    password += [secrets.choice(all_characters) for _ in range(length - 4)]
+
+    # Mezclar la contraseña
+    secrets.SystemRandom().shuffle(password)
+
+    return ''.join(password)
 
 
 def create_access_token(user_id: int, business_id: int, role: UserRole) -> str:

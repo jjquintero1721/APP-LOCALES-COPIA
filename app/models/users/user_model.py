@@ -28,6 +28,8 @@ class User(Base):
     business_id = Column(Integer, ForeignKey("business.id", ondelete="CASCADE"), nullable=False, index=True)
     email = Column(String(255), nullable=False)
     full_name = Column(String(255), nullable=False)
+    phone = Column(String(20), nullable=True)
+    document = Column(String(50), nullable=True)
     hashed_password = Column(String(255), nullable=False)
     role = Column(Enum(UserRole), nullable=False, default=UserRole.CASHIER)
     is_active = Column(Boolean, default=True, nullable=False)

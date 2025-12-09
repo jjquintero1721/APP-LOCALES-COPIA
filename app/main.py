@@ -5,6 +5,7 @@ from app.config.settings import settings
 from app.middleware.logging_middleware import LoggingMiddleware
 from app.routers.auth import auth_router
 from app.routers.users import users_router
+from app.routers.employees import employees_router
 
 # Configurar logging
 logging.basicConfig(
@@ -36,6 +37,7 @@ app.add_middleware(LoggingMiddleware)
 # Incluir routers
 app.include_router(auth_router.router)
 app.include_router(users_router.router)
+app.include_router(employees_router.router)
 
 
 @app.get("/", tags=["Root"])

@@ -10,6 +10,8 @@ class UserBase(BaseModel):
     """
     email: EmailStr
     full_name: str = Field(..., min_length=1, max_length=255)
+    phone: Optional[str] = Field(None, max_length=20)
+    document: Optional[str] = Field(None, max_length=50)
 
 
 class UserCreate(UserBase):

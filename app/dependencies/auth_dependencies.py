@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.database import get_db
 from app.utils.security import decode_token
 from app.repositories.users.users_repository import UsersRepository
-from app.models.users.user_model import User
+from app.models.users.user_model import User, UserRole
 
 # Bearer token scheme
 security = HTTPBearer()
@@ -47,3 +47,31 @@ async def get_current_user(
         )
 
     return user
+
+
+async def require_owner(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """
+    Dependency que requiere que el usuario sea OWNER.
+    """
+    if current_user.role != UserRole.OWNER:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only owners can perform this action",
+        )
+    return current_user
+
+
+async def require_owner_or_admin(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """
+    Dependency que requiere que el usuario sea OWNER o ADMIN.
+    """
+    if current_user.role not in [UserRole.OWNER, UserRole.ADMIN]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only owners or admins can perform this action",
+        )
+    return current_user
