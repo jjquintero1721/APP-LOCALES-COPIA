@@ -38,6 +38,7 @@ class User(Base):
     # Relationships
     business = relationship("Business", back_populates="users")
     audit_logs = relationship("AuditLog", back_populates="user")
+    attendance_records = relationship("Attendance", back_populates="employee", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}', business_id={self.business_id})>"

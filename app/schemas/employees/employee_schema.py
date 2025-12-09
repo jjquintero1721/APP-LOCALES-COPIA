@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 from datetime import datetime
 from typing import Optional
 from app.models.users.user_model import UserRole
+from app.schemas.attendance.attendance_schema import TodayAttendanceResponse
 
 
 class EmployeeCreateRequest(BaseModel):
@@ -59,6 +60,8 @@ class EmployeeResponse(BaseModel):
     created_at: datetime
     # Incluir contraseña temporal solo al crear (se manejará en el servicio)
     temporary_password: Optional[str] = None
+    # Asistencia del día actual
+    today_attendance: Optional[TodayAttendanceResponse] = None
 
     class Config:
         from_attributes = True

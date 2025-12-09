@@ -1,13 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from typing import List, Optional, Dict, Any
+from datetime import datetime
 from app.repositories.users.users_repository import UsersRepository
 from app.repositories.audit.audit_repository import AuditRepository
+from app.repositories.attendance.attendance_repository import AttendanceRepository
 from app.schemas.employees.employee_schema import (
     EmployeeCreateRequest,
     EmployeeUpdateRequest,
     EmployeeResponse,
 )
+from app.schemas.attendance.attendance_schema import TodayAttendanceResponse
 from app.models.users.user_model import User, UserRole
 from app.utils.security import get_password_hash, generate_random_password
 
@@ -31,6 +34,7 @@ class EmployeesService:
         self.db = db
         self.users_repo = UsersRepository(db)
         self.audit_repo = AuditRepository(db)
+        self.attendance_repo = AttendanceRepository(db)
 
     def _can_manage_role(self, manager_role: UserRole, target_role: UserRole) -> bool:
         """
@@ -46,6 +50,32 @@ class EmployeesService:
         manager_level = self.ROLE_HIERARCHY.get(manager_role, 0)
         target_level = self.ROLE_HIERARCHY.get(target_role, 0)
         return manager_level > target_level
+
+    async def _get_today_attendance(self, employee_id: int, business_id: int) -> Optional[TodayAttendanceResponse]:
+        """
+        Obtiene la asistencia del día actual de un empleado.
+
+        Args:
+            employee_id: ID del empleado
+            business_id: ID del negocio
+
+        Returns:
+            TodayAttendanceResponse con check_in y check_out, o None si no hay registro
+        """
+        today = datetime.utcnow().date()
+        attendance = await self.attendance_repo.get_today_attendance(
+            employee_id=employee_id,
+            business_id=business_id,
+            today_date=today,
+        )
+
+        if not attendance:
+            return None
+
+        return TodayAttendanceResponse(
+            check_in=attendance.check_in,
+            check_out=attendance.check_out,
+        )
 
     async def create_employee(
         self,
@@ -138,7 +168,14 @@ class EmployeesService:
                 detail="Empleado no encontrado.",
             )
 
-        return EmployeeResponse.model_validate(employee)
+        # Obtener asistencia del día
+        today_attendance = await self._get_today_attendance(employee.id, current_user.business_id)
+
+        # Crear respuesta
+        response = EmployeeResponse.model_validate(employee)
+        response.today_attendance = today_attendance
+
+        return response
 
     async def get_all_employees(
         self,
@@ -155,12 +192,21 @@ class EmployeesService:
             limit: Número máximo de registros
 
         Returns:
-            Lista de EmployeeResponse
+            Lista de EmployeeResponse con asistencia del día actual
         """
         employees = await self.users_repo.get_all_by_business(
             current_user.business_id, skip, limit
         )
-        return [EmployeeResponse.model_validate(emp) for emp in employees]
+
+        # Agregar asistencia del día a cada empleado
+        result = []
+        for emp in employees:
+            today_attendance = await self._get_today_attendance(emp.id, current_user.business_id)
+            response = EmployeeResponse.model_validate(emp)
+            response.today_attendance = today_attendance
+            result.append(response)
+
+        return result
 
     async def update_employee(
         self,
