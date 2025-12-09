@@ -19,6 +19,13 @@ class UsersController:
         Endpoint: GET /users/me
         Obtiene el perfil del usuario actual.
         """
+        # Crear el response con los datos del usuario
+        user_response = UserResponse.model_validate(current_user)
+        
+        # Agregar el nombre del negocio si existe
+        if current_user.business:
+            user_response.business_name = current_user.business.name
+        
         return UserResponse.model_validate(current_user)
 
     @staticmethod

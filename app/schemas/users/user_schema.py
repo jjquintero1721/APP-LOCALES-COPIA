@@ -38,6 +38,7 @@ class UserResponse(UserBase):
     """
     id: int
     business_id: int
+    business_name: Optional[str] = None
     role: UserRole
     is_active: bool
     created_at: datetime
