@@ -21,7 +21,7 @@ class InventoryMovement(Base):
     business_id = Column(Integer, ForeignKey("business.id", ondelete="CASCADE"), nullable=False, index=True)
     created_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
 
-    movement_type = Column(Enum(MovementType), nullable=False, index=True)
+    movement_type = Column(Enum(MovementType, values_callable=lambda x: [e.value for e in x]), nullable=False, index=True)
     quantity = Column(Numeric(10, 3), nullable=False)  # Puede ser positiva o negativa
     reason = Column(Text, nullable=True)  # Obligatorio para manual
     reference_id = Column(Integer, nullable=True, index=True)  # ID de venta/traslado/etc
