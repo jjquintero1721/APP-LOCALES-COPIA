@@ -20,7 +20,7 @@ class BusinessRelationship(Base):
     id = Column(Integer, primary_key=True, index=True)
     requester_business_id = Column(Integer, ForeignKey("business.id", ondelete="CASCADE"), nullable=False, index=True)
     target_business_id = Column(Integer, ForeignKey("business.id", ondelete="CASCADE"), nullable=False, index=True)
-    status = Column(Enum(RelationshipStatus), nullable=False, default=RelationshipStatus.PENDING.value, index=True)
+    status = Column(Enum(RelationshipStatus, values_callable=lambda x: [e.value for e in x]), nullable=False, default=RelationshipStatus.PENDING.value, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
