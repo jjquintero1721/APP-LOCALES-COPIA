@@ -8,6 +8,21 @@ from app.routers.users import users_router
 from app.routers.employees import employees_router
 from app.routers.attendance import attendance_router
 
+# Inventory Module Routers
+from app.routers.suppliers.suppliers_router import router as suppliers_router
+from app.routers.inventory.inventory_items_router import router as inventory_items_router
+from app.routers.inventory.inventory_movements_router import router as inventory_movements_router
+from app.routers.inventory.inventory_transfers_router import router as inventory_transfers_router
+
+# Business Relationships Router
+from app.routers.business.business_relationships_router import router as business_relationships_router
+
+# Products Router
+from app.routers.products.products_router import router as products_router
+
+# Modifiers Router
+from app.routers.modifiers.modifiers_router import router as modifiers_router
+
 # Configurar logging
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +55,21 @@ app.include_router(auth_router.router)
 app.include_router(users_router.router)
 app.include_router(employees_router.router)
 app.include_router(attendance_router.router)
+
+# Inventory Module
+app.include_router(suppliers_router)
+app.include_router(inventory_items_router)
+app.include_router(inventory_movements_router)
+app.include_router(inventory_transfers_router)
+
+# Business Relationships
+app.include_router(business_relationships_router)
+
+# Products
+app.include_router(products_router)
+
+# Modifiers
+app.include_router(modifiers_router)
 
 
 @app.get("/", tags=["Root"])

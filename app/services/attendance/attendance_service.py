@@ -6,6 +6,7 @@ from app.repositories.attendance.attendance_repository import AttendanceReposito
 from app.repositories.audit.audit_repository import AuditRepository
 from app.schemas.attendance.attendance_schema import AttendanceResponse
 from app.models.users.user_model import User, UserRole
+from datetime import datetime, timezone
 
 
 class AttendanceService:
@@ -69,7 +70,7 @@ class AttendanceService:
         self._validate_employee_role(current_user)
 
         # Obtener fecha y hora actual (UTC)
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         today = now.date()
 
         # Verificar si ya existe un registro de asistencia hoy
@@ -123,7 +124,7 @@ class AttendanceService:
         self._validate_employee_role(current_user)
 
         # Obtener fecha y hora actual (UTC)
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         today = now.date()
 
         # Verificar si existe un registro de asistencia hoy
@@ -157,6 +158,18 @@ class AttendanceService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="La hora de salida debe ser posterior a la hora de entrada.",
             )
+
+        # Normalizar check_in a timezone-aware
+        check_in = attendance.check_in
+        if check_in.tzinfo is None:
+            check_in = check_in.replace(tzinfo=timezone.utc)
+
+        # Validación correcta
+        if now <= check_in:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="La hora de salida debe ser posterior a la hora de entrada.",
+            )    
 
         # Actualizar check-out
         attendance = await self.attendance_repo.update_check_out(attendance, now)
