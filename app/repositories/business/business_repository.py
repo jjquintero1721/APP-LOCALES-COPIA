@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional
+from typing import Optional, List
 from app.models.business.business_model import Business
 
 
@@ -30,3 +30,10 @@ class BusinessRepository:
             select(Business).where(Business.id == business_id)
         )
         return result.scalar_one_or_none()
+
+    async def get_all(self) -> List[Business]:
+        """
+        Obtiene todos los negocios.
+        """
+        result = await self.db.execute(select(Business))
+        return list(result.scalars().all())

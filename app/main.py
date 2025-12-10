@@ -14,7 +14,8 @@ from app.routers.inventory.inventory_items_router import router as inventory_ite
 from app.routers.inventory.inventory_movements_router import router as inventory_movements_router
 from app.routers.inventory.inventory_transfers_router import router as inventory_transfers_router
 
-# Business Relationships Router
+# Business Routers
+from app.routers.business.business_router import router as business_router
 from app.routers.business.business_relationships_router import router as business_relationships_router
 
 # Products Router
@@ -62,7 +63,8 @@ app.include_router(inventory_items_router)
 app.include_router(inventory_movements_router)
 app.include_router(inventory_transfers_router)
 
-# Business Relationships
+# Business
+app.include_router(business_router)
 app.include_router(business_relationships_router)
 
 # Products
