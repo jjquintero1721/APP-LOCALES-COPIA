@@ -385,7 +385,7 @@ class InventoryItemsService:
             inventory_item_id=item_id,
             business_id=current_user.business_id,
             created_by_user_id=current_user.id,
-            movement_type=movement_type,
+            movement_type=movement_type.value,
             quantity=data.quantity_change,
             reason=data.reason,
         )

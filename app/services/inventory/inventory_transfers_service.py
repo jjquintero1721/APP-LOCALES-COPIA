@@ -239,7 +239,7 @@ class InventoryTransfersService:
                 inventory_item_id=origin_item.id,
                 business_id=transfer.from_business_id,
                 created_by_user_id=current_user.id,
-                movement_type=MovementType.TRANSFER_OUT,
+                movement_type=MovementType.TRANSFER_OUT.value,
                 quantity=transfer_item.quantity,
                 reason=f"Traslado a '{transfer.to_business.name}' (ID: {transfer.id})",
                 reference_id=transfer.id,
@@ -287,7 +287,7 @@ class InventoryTransfersService:
                 inventory_item_id=dest_item.id,
                 business_id=transfer.to_business_id,
                 created_by_user_id=current_user.id,
-                movement_type=MovementType.TRANSFER_IN,
+                movement_type=MovementType.TRANSFER_IN.value,
                 quantity=transfer_item.quantity,
                 reason=f"Traslado desde '{transfer.from_business.name}' (ID: {transfer.id})",
                 reference_id=transfer.id,
@@ -300,7 +300,7 @@ class InventoryTransfersService:
         # Actualizar estado del traslado
         updated_transfer = await self.transfers_repo.update_status(
             transfer=transfer,
-            new_status=TransferStatus.COMPLETED,
+            new_status=TransferStatus.COMPLETED.value,
         )
 
         # Registrar auditoría en ambos negocios
@@ -369,7 +369,7 @@ class InventoryTransfersService:
         # Actualizar estado
         updated_transfer = await self.transfers_repo.update_status(
             transfer=transfer,
-            new_status=TransferStatus.REJECTED,
+            new_status=TransferStatus.REJECTED.value,
         )
 
         # Registrar auditoría en ambos negocios

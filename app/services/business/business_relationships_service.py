@@ -170,7 +170,7 @@ class BusinessRelationshipsService:
         # Actualizar estado
         updated_relationship = await self.relationships_repo.update_status(
             relationship=relationship,
-            new_status=RelationshipStatus.ACTIVE,
+            new_status=RelationshipStatus.ACTIVE.value,
         )
 
         # Registrar auditoría en ambos negocios
@@ -241,7 +241,7 @@ class BusinessRelationshipsService:
         # Actualizar estado
         updated_relationship = await self.relationships_repo.update_status(
             relationship=relationship,
-            new_status=RelationshipStatus.REJECTED,
+            new_status=RelationshipStatus.REJECTED.value,
         )
 
         # Registrar auditoría en ambos negocios

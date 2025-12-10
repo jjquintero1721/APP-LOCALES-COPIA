@@ -21,7 +21,7 @@ class InventoryTransfer(Base):
     to_business_id = Column(Integer, ForeignKey("business.id", ondelete="CASCADE"), nullable=False, index=True)
     created_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
 
-    status = Column(Enum(TransferStatus), nullable=False, default=TransferStatus.PENDING, index=True)
+    status = Column(Enum(TransferStatus), nullable=False, default=TransferStatus.PENDING.value, index=True)
     notes = Column(Text, nullable=True)  # Notas del traslado
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

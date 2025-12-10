@@ -229,7 +229,7 @@ class InventoryMovementsService:
             inventory_item_id=original_movement.inventory_item_id,
             business_id=current_user.business_id,
             created_by_user_id=current_user.id,
-            movement_type=MovementType.REVERT,
+            movement_type=MovementType.REVERT.value,
             quantity=-original_movement.quantity,  # Cantidad inversa
             reason=f"Reversión del movimiento #{original_movement.id}. Motivo: {data.reason}",
             reference_id=original_movement.id,

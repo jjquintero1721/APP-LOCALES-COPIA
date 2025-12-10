@@ -26,7 +26,7 @@ class BusinessRelationshipsRepository:
         relationship = BusinessRelationship(
             requester_business_id=requester_business_id,
             target_business_id=target_business_id,
-            status=RelationshipStatus.PENDING,
+            status=RelationshipStatus.PENDING.value,
         )
         self.db.add(relationship)
         await self.db.commit()

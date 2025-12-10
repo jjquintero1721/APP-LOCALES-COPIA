@@ -46,7 +46,7 @@ class InventoryTransfersRepository:
             from_business_id=from_business_id,
             to_business_id=to_business_id,
             created_by_user_id=created_by_user_id,
-            status=TransferStatus.PENDING,
+            status=TransferStatus.PENDING.value,
             notes=notes,
         )
         self.db.add(transfer)
@@ -160,7 +160,7 @@ class InventoryTransfersRepository:
         Returns:
             InventoryTransfer cancelado
         """
-        transfer.status = TransferStatus.CANCELLED
+        transfer.status = TransferStatus.CANCELLED.value
         await self.db.commit()
         await self.db.refresh(transfer)
         return transfer

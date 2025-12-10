@@ -24,7 +24,7 @@ class InventoryMovementsRepository:
         inventory_item_id: int,
         business_id: int,
         created_by_user_id: Optional[int],
-        movement_type: MovementType,
+        movement_type: str,
         quantity: Decimal,
         reason: Optional[str] = None,
         reference_id: Optional[int] = None,
