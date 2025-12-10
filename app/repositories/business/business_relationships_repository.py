@@ -78,7 +78,7 @@ class BusinessRelationshipsRepository:
             .where(
                 and_(
                     BusinessRelationship.target_business_id == business_id,
-                    BusinessRelationship.status == RelationshipStatus.PENDING,
+                    BusinessRelationship.status == RelationshipStatus.PENDING.value,
                 )
             )
             .order_by(BusinessRelationship.created_at.desc())
@@ -99,7 +99,7 @@ class BusinessRelationshipsRepository:
                         BusinessRelationship.requester_business_id == business_id,
                         BusinessRelationship.target_business_id == business_id,
                     ),
-                    BusinessRelationship.status == RelationshipStatus.ACTIVE,
+                    BusinessRelationship.status == RelationshipStatus.ACTIVE.value,
                 )
             )
             .order_by(BusinessRelationship.created_at.desc())

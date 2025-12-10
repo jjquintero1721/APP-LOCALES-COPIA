@@ -75,9 +75,21 @@ class InventoryMovementsService:
         )
 
         # Preparar respuesta
-        response = MovementResponse.model_validate(movement)
-        response.inventory_item_name = item.name
-        response.created_by_user_name = movement.created_by.full_name if movement.created_by else None
+        response = MovementResponse(
+            id=movement.id,
+            inventory_item_id=movement.inventory_item_id,
+            inventory_item_name=item.name,
+            business_id=movement.business_id,
+            created_by_user_id=movement.created_by_user_id,
+            created_by_user_name=movement.created_by.full_name if movement.created_by else None,
+            movement_type=movement.movement_type,
+            quantity=movement.quantity,
+            reason=movement.reason,
+            reference_id=movement.reference_id,
+            reverted=movement.reverted,
+            reverted_by_movement_id=movement.reverted_by_movement_id,
+            created_at=movement.created_at,
+        )
 
         return response
 
@@ -95,9 +107,21 @@ class InventoryMovementsService:
                 detail="Movimiento no encontrado.",
             )
 
-        response = MovementResponse.model_validate(movement)
-        response.inventory_item_name = movement.inventory_item.name if movement.inventory_item else "Desconocido"
-        response.created_by_user_name = movement.created_by.full_name if movement.created_by else None
+        response = MovementResponse(
+            id=movement.id,
+            inventory_item_id=movement.inventory_item_id,
+            inventory_item_name=movement.inventory_item.name if movement.inventory_item else "Desconocido",
+            business_id=movement.business_id,
+            created_by_user_id=movement.created_by_user_id,
+            created_by_user_name=movement.created_by.full_name if movement.created_by else None,
+            movement_type=movement.movement_type,
+            quantity=movement.quantity,
+            reason=movement.reason,
+            reference_id=movement.reference_id,
+            reverted=movement.reverted,
+            reverted_by_movement_id=movement.reverted_by_movement_id,
+            created_at=movement.created_at,
+        )
 
         return response
 
@@ -126,9 +150,21 @@ class InventoryMovementsService:
 
         responses = []
         for movement in movements:
-            response = MovementResponse.model_validate(movement)
-            response.inventory_item_name = item.name
-            response.created_by_user_name = movement.created_by.full_name if movement.created_by else None
+            response = MovementResponse(
+                id=movement.id,
+                inventory_item_id=movement.inventory_item_id,
+                inventory_item_name=item.name,
+                business_id=movement.business_id,
+                created_by_user_id=movement.created_by_user_id,
+                created_by_user_name=movement.created_by.full_name if movement.created_by else None,
+                movement_type=movement.movement_type,
+                quantity=movement.quantity,
+                reason=movement.reason,
+                reference_id=movement.reference_id,
+                reverted=movement.reverted,
+                reverted_by_movement_id=movement.reverted_by_movement_id,
+                created_at=movement.created_at,
+            )
             responses.append(response)
 
         return responses
@@ -150,9 +186,21 @@ class InventoryMovementsService:
 
         responses = []
         for movement in movements:
-            response = MovementResponse.model_validate(movement)
-            response.inventory_item_name = movement.inventory_item.name if movement.inventory_item else "Desconocido"
-            response.created_by_user_name = movement.created_by.full_name if movement.created_by else None
+            response = MovementResponse(
+                id=movement.id,
+                inventory_item_id=movement.inventory_item_id,
+                inventory_item_name=movement.inventory_item.name if movement.inventory_item else "Desconocido",
+                business_id=movement.business_id,
+                created_by_user_id=movement.created_by_user_id,
+                created_by_user_name=movement.created_by.full_name if movement.created_by else None,
+                movement_type=movement.movement_type,
+                quantity=movement.quantity,
+                reason=movement.reason,
+                reference_id=movement.reference_id,
+                reverted=movement.reverted,
+                reverted_by_movement_id=movement.reverted_by_movement_id,
+                created_at=movement.created_at,
+            )
             responses.append(response)
 
         return responses
@@ -249,8 +297,20 @@ class InventoryMovementsService:
         )
 
         # Preparar respuesta
-        response = MovementResponse.model_validate(reverting_movement)
-        response.inventory_item_name = item.name
-        response.created_by_user_name = current_user.full_name
+        response = MovementResponse(
+            id=reverting_movement.id,
+            inventory_item_id=reverting_movement.inventory_item_id,
+            inventory_item_name=item.name,
+            business_id=reverting_movement.business_id,
+            created_by_user_id=reverting_movement.created_by_user_id,
+            created_by_user_name=current_user.full_name,
+            movement_type=reverting_movement.movement_type,
+            quantity=reverting_movement.quantity,
+            reason=reverting_movement.reason,
+            reference_id=reverting_movement.reference_id,
+            reverted=reverting_movement.reverted,
+            reverted_by_movement_id=reverting_movement.reverted_by_movement_id,
+            created_at=reverting_movement.created_at,
+        )
 
         return response
